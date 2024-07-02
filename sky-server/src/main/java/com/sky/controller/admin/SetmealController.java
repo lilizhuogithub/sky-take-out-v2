@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 套餐管理
  */
@@ -43,4 +45,12 @@ public class SetmealController {
         return Result.success(pageResult);
     }
 
+    @DeleteMapping
+    @ApiOperation("批量删除套餐")
+    public Result delete(@RequestParam List<Long> ids) {
+
+        setmealService.deleteBatch(ids);
+
+        return Result.success();
+    }
 }
