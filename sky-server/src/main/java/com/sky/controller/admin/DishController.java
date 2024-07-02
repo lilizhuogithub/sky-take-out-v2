@@ -88,4 +88,12 @@ public class DishController {
         return Result.success(list);
     }
 
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用/禁用员工账号")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        log.info("启用禁用员工账号：{} {}", status, id);
+        dishService.startOrStop(status, id);
+        return Result.success();
+    }
+
 }

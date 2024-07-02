@@ -8,6 +8,7 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Employee;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
@@ -145,5 +146,17 @@ public class DishServiceImpl implements DishService {
                 .build();
 
         return dishMapper.list(dish);
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        //使用builder的方式构建employee对象
+        Dish dish = Dish.builder()
+                .id(id)
+                .status(status)
+                .build();
+
+
+        dishMapper.update(dish);
     }
 }

@@ -9,6 +9,7 @@ import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -70,5 +71,11 @@ public class SetmealController {
     }
 
 
+    @PostMapping("/status/{status}")
+    @ApiOperation("起售停售套餐")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        setmealService.startOrStop(status, id);
+        return Result.success();
+    }
 
 }
