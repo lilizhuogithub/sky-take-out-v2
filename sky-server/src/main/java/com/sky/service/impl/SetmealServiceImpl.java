@@ -49,7 +49,7 @@ public class SetmealServiceImpl implements SetmealService {
 
 
         //保存套餐和菜品的关系关系
-        setmealMapper.insertBatch(setmealDishes);
+        setmealDishMapper.insertBatch(setmealDishes);
 
     }
 
@@ -69,7 +69,7 @@ public class SetmealServiceImpl implements SetmealService {
     public void deleteBatch(List<Long> ids) {
         //遍历id根据id查询对应的套餐
         ids.forEach(id -> {
-            Setmeal setmeal = setmealMapper.getId(id);
+            Setmeal setmeal = setmealMapper.getById(id);
             if (setmeal.getStatus() == StatusConstant.ENABLE) {
                 //起售中的套餐不能删除
                 throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
@@ -80,8 +80,48 @@ public class SetmealServiceImpl implements SetmealService {
             //删除套餐表中的数据
             setmealMapper.deleteById(setmealId);
             //删除套餐菜品关系表中的数据
-            setmealDishMapper.deleteById(setmealId);
+            setmealDishMapper.deleteBySetId(setmealId);
         });
+
+    }
+
+    @Override
+    public SetmealVO getByIdWithDish(Long id) {
+        //查询套餐
+        Setmeal setmeal = setmealMapper.getById(id);
+        //查询套餐的菜品
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
+
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal, setmealVO);
+
+        setmealVO.setSetmealDishes(setmealDishes);
+
+
+        return setmealVO;
+    }
+
+    @Override
+    @Transactional
+    public void update(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+
+        //修改套餐表
+        setmealMapper.update(setmeal);
+
+        //删除套餐和菜品的关联关系，操作setmeal_dish表，执行delete
+        Long setmealId = setmeal.getId();
+        setmealDishMapper.deleteBySetId(setmealId);
+
+        //重新设置套餐表中的菜品对应的套餐id
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealDishes.forEach(setmealDish -> {
+            setmealDish.setSetmealId(setmealId);
+        });
+
+        //重新插入套餐和菜品的关联关系，操作setmeal_dish表，执行insert
+        setmealDishMapper.insertBatch(setmealDishes);
 
     }
 }

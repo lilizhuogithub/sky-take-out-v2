@@ -27,13 +27,16 @@ public interface SetmealMapper {
     @AutoFill(OperationType.INSERT)
     void insert(Setmeal setmeal);
 
-    void insertBatch(List<SetmealDish> setmealDishes);
+
 
     Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
     @Select("select * from setmeal where id = #{id}")
-    Setmeal getId(Long id);
+    Setmeal getById(Long id);
 
     @Delete("delete from setmeal where id = #{setmealId}")
     void deleteById(Long setmealId);
+
+    @AutoFill(OperationType.UPDATE)
+    void update(Setmeal setmeal);
 }
