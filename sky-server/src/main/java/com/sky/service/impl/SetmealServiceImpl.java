@@ -16,6 +16,7 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,16 +138,44 @@ public class SetmealServiceImpl implements SetmealService {
             //select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = ?
             //遍历所有的菜品，如果含有未起售的菜品，抛出异常
             List<Dish> dishes = dishMapper.getBySetmealId(id);
-            if(dishes != null && dishes.size() > 0) {
+            if (dishes != null && dishes.size() > 0) {
                 //遍历所有的菜品
-                dishes.forEach(dish -> {if(dish.getStatus() == StatusConstant.DISABLE) {
-                throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
-                }
+                dishes.forEach(dish -> {
+                    if (dish.getStatus() == StatusConstant.DISABLE) {
+                        throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                    }
                 });
             }
 
         }
 
+        Setmeal setmeal = Setmeal.builder()
+                .id(id)
+                .status(status)
+                .build();
+        setmealMapper.update(setmeal);
 
+
+    }
+
+    /**
+     * 条件查询
+     *
+     * @param setmeal
+     * @return
+     */
+    public List<Setmeal> list(Setmeal setmeal) {
+        List<Setmeal> list = setmealMapper.list(setmeal);
+        return list;
+    }
+
+    /**
+     * 根据id查询菜品选项
+     *
+     * @param id
+     * @return
+     */
+    public List<DishItemVO> getDishItemById(Long id) {
+        return setmealMapper.getDishItemBySetmealId(id);
     }
 }
