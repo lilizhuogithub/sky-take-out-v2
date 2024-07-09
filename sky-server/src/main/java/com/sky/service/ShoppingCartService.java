@@ -15,9 +15,6 @@ public interface ShoppingCartService {
 
 
     List<ShoppingCart> showShoppingCart();
-<<<<<<< HEAD
 
     void cleanShoppingCart();
-=======
->>>>>>> 853085de920e01958818a6476fb0a4f1fa7d5779
 }
