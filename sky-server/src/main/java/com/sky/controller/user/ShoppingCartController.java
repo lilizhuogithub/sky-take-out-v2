@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/user//shoppingCart")
+@RequestMapping("/user/shoppingCart")
 @Slf4j
 @Api(tags = "C端-购物车接口")
 public class ShoppingCartController {
@@ -40,5 +40,13 @@ public class ShoppingCartController {
     public Result<List<ShoppingCart>> list() {
         List<ShoppingCart> list = shoppingCartService.showShoppingCart();
         return Result.success(list);
+    }
+
+
+    @DeleteMapping("/clean")
+    @ApiOperation("清空购物车")
+    public Result clean() {
+        shoppingCartService.cleanShoppingCart();
+        return Result.success();
     }
 }
