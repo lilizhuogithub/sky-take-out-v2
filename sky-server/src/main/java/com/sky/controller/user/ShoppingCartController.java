@@ -41,6 +41,7 @@ public class ShoppingCartController {
         List<ShoppingCart> list = shoppingCartService.showShoppingCart();
         return Result.success(list);
     }
+<<<<<<< HEAD
 
 
     @DeleteMapping("/clean")
@@ -49,4 +50,6 @@ public class ShoppingCartController {
         shoppingCartService.cleanShoppingCart();
         return Result.success();
     }
+=======
+>>>>>>> 853085de920e01958818a6476fb0a4f1fa7d5779
 }

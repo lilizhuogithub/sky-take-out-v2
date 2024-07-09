@@ -78,11 +78,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .build());
 
         return list;
+<<<<<<< HEAD
     }
 
     @Override
     public void cleanShoppingCart() {
         shoppingCartMapper.deleteByUserId(BaseContext.getCurrentId());
+=======
+>>>>>>> 853085de920e01958818a6476fb0a4f1fa7d5779
     }
 
 
