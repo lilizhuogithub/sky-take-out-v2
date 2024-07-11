@@ -17,4 +17,7 @@ public interface UserMapper {
 
     //插入数据，需要返回userId，后边生成jwt令牌会用到
     void insert(User user);
+
+    @Select("select * from user where id = #{userId}")
+    User getById(Long userId);
 }
