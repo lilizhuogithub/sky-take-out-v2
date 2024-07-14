@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -249,4 +250,29 @@ public class OrderServiceImpl implements OrderService {
         orders.setCancelTime(LocalDateTime.now());
         orderMapper.update(orders);
     }
+
+    @Override
+    public void repetition(Long id) {
+        //查看当前用户的id
+        Long userId = BaseContext.getCurrentId();
+
+        //根据订单的id查询当前订单详情
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
+
+        //将订单详情对象转换为购物车对象
+        List<ShoppingCart> shoppingCartList = orderDetailList.stream().map(x -> {   //map方法将每个流中订单详情对象转换为一个新的购物车对象
+            ShoppingCart shoppingCart = new ShoppingCart();
+
+            //将原订单里面的菜品信息重新赋值到购物车对象中
+            BeanUtils.copyProperties(x, shoppingCart, "id");
+            shoppingCart.setUserId(userId);
+            shoppingCart.setCreateTime(LocalDateTime.now());
+
+            return shoppingCart;     //将创建并初始化的购物车对象返回给map方法，以便最终收集到shoppingCartList列表中
+        }).collect(Collectors.toList());     //.collect方法将转换后的购物车对象收集回一个列表；
+
+        //将购物车对象批量添加到数据库
+        shoppingCartMapper.insertBatch(shoppingCartList);
+    }
+
 }
