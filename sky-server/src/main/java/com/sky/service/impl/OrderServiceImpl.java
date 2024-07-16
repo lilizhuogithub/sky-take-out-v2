@@ -61,6 +61,9 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException(MessageConstant.ADDRESS_BOOK_IS_NULL);
         }
 
+        //使用百度开放接口判断是否超出范围
+
+
         Long userId = BaseContext.getCurrentId();
         //查看当前用户的购物车数据
         ShoppingCart shoppingCart = new ShoppingCart();
